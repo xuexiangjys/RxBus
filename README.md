@@ -31,25 +31,39 @@
 
 ### 2.1、添加Gradle依赖
 
-先在项目根目录的 build.gradle 的 repositories 添加:
+1.先在项目根目录的 build.gradle 的 repositories 添加:
 ```
 allprojects {
-     repositories {
+    repositories {
         ...
         maven { url "https://jitpack.io" }
     }
 }
+```
+
+2.再在项目根目录的 build.gradle 的 dependencies 添加xmark插件：
+
+```
+buildscript {
+    ···
+    dependencies {
+        ···
+        classpath 'com.github.xuexiangjys.RxBus:rxbus-plugin:1.0.0'
+    }
+}
+```
+
+3.在项目的 build.gradle 中增加依赖并引用Rxbus插件
 
 ```
 
-然后在dependencies添加:
+apply plugin: 'com.xuexiang.rxbus'  //引用Rxbus插件
 
-```
 dependencies {
    ...
    implementation 'io.reactivex:rxjava:1.3.6'
    implementation 'io.reactivex:rxandroid:1.2.1'
-   implementation 'com.github.xuexiangjys:RxBus:1.0'
+   implementation 'com.github.xuexiangjys.RxBus:rxbus-runtime:1.0.0'
 }
 ```
 
@@ -201,7 +215,7 @@ public class RxEventTest {
 
 ![](https://github.com/xuexiangjys/XPage/blob/master/img/qq_group.jpg)
 
-[rxSvg]: https://img.shields.io/badge/RxBus-v1.0-brightgreen.svg
+[rxSvg]: https://img.shields.io/badge/RxBus-v1.0.0-brightgreen.svg
 [rx]: https://github.com/xuexiangjys/RxBus
 [apiSvg]: https://img.shields.io/badge/API-14+-brightgreen.svg
 [api]: https://android-arsenal.com/api?level=14
