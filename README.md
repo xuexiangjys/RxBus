@@ -135,7 +135,7 @@ RxEventUtils.post(EventKey.EVENT_HAVE_DATA_ID, new Event(EventKey.EVENT_HAVE_DAT
 
 ```
 
-### 2.3、事件注销
+### 2.4、事件注销
 
 1.使用RxBusUtils.get().unregisterAll(Object eventName)取消事件的所有订阅并注销事件。
 
@@ -165,6 +165,35 @@ RxEventUtils.unregisterAll(EventKey.EVENT_HAVE_DATA_ID);
 RxEventUtils.unregisterAll(EventKey.EVENT_NO_DATA_ID);
 
 ```
+
+### 2.5、非activity和fragment使用@BusRegister和@BusUnRegister进行事件的注册和注销。
+
+```
+public class RxEventTest {
+
+    public RxEventTest() {
+        register();
+    }
+
+    @BusRegister
+    private void register() {
+
+    }
+
+
+    @Bus(id = EventKey.EVENT_TEST_ID)
+    public void getRxEventTest() {
+        RxLog.e("收到了RxEventTest消息");
+    }
+
+    @BusUnRegister
+    public void unRegister() {
+
+    }
+
+}
+```
+
 
 ## 联系方式
 

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'com.xuexiang.rxbus'
+//apply plugin: 'com.xuexiang.rxbus'
 
 android {
     compileSdkVersion 26
