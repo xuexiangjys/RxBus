@@ -18,6 +18,7 @@ package com.xuexiang.rxbusdemo.fragment;
 
 import com.xuexiang.rxbus.annotation.Bus;
 import com.xuexiang.rxbus.bus.RxBusUtils;
+import com.xuexiang.rxbus.bus.rxevent.RxEventUtils;
 import com.xuexiang.rxbusdemo.entity.Event;
 import com.xuexiang.rxbusdemo.entity.EventKey;
 
@@ -54,13 +55,14 @@ public class RxBusTestFragment1 extends BaseRxBusTestFragment {
     }
 
     @Bus(id = EventKey.EVENT_HAVE_DATA_ID, thread = Bus.UI)
-    public void handleHaveDataEvent(Event event) {
+    private void handleHaveDataEvent(Event event) {
         showContent(EventKey.EVENT_HAVE_DATA, "EventID" + EventKey.EVENT_HAVE_DATA_ID + "\n" + event.toString());
     }
 
     @Override
     protected void onCancelEvent() {
 //        RxBusUtils.get().unregisterAll(EventKey.EVENT_HAVE_DATA);
+        RxEventUtils.unregisterAll(EventKey.EVENT_HAVE_DATA_ID);
         RxBusUtils.get().unregisterAll(EventKey.EVENT_ONE_BY_ONE);
         RxBusUtils.get().unregister(EventKey.EVENT_CLEAR, mSubscribeInfo);
 

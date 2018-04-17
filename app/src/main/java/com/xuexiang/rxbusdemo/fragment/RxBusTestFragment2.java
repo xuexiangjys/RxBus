@@ -20,6 +20,7 @@ import com.xuexiang.rxbus.annotation.Bus;
 import com.xuexiang.rxbus.bus.RxBusUtils;
 import com.xuexiang.rxbus.bus.SubscribeInfo;
 import com.xuexiang.rxbus.bus.rxevent.RxEvent;
+import com.xuexiang.rxbus.bus.rxevent.RxEventUtils;
 import com.xuexiang.rxbusdemo.entity.Event;
 import com.xuexiang.rxbusdemo.entity.EventKey;
 
@@ -60,13 +61,14 @@ public class RxBusTestFragment2 extends BaseRxBusTestFragment {
 //    }
 
     @Bus(id = EventKey.EVENT_NO_DATA_ID, thread = Bus.UI)
-    public void handleNoDataEvent() {
+    private void handleNoDataEvent() {
         showContent(String.valueOf(EventKey.EVENT_NO_DATA_ID), "没有数据！");
     }
 
     @Override
     protected void onCancelEvent() {
 //        RxBusUtils.get().unregisterAll(EventKey.EVENT_NO_DATA);
+        RxEventUtils.unregisterAll(EventKey.EVENT_NO_DATA_ID);
         RxBusUtils.get().unregister(EventKey.EVENT_ONE_BY_MORE, mOneByMore);
         RxBusUtils.get().unregister(EventKey.EVENT_CLEAR, mSubscribeInfo);
     }

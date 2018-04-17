@@ -68,7 +68,7 @@ public class RxBus {
             subjects = new ArrayList<>();
             maps.put(eventName, subjects);
         }
-        Subject<T, T> subject = PublishSubject.<T>create();
+        Subject<T, T> subject = PublishSubject.<T>create().toSerialized();
         subjects.add(subject);
         return subject;
     }
