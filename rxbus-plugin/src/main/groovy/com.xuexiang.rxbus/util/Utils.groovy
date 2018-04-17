@@ -35,8 +35,6 @@ public final class Utils {
         pool.importPackage(Consts.BusRegisterAnnotation)
         pool.importPackage(Consts.BusUnRegisterAnnotation)
         pool.importPackage("android.os.Bundle")
-//        pool.importPackage("rx.functions.Action1")
-
         pool.importPackage(Consts.Action)
         pool.importPackage(Consts.RxEvent)
         pool.importPackage(Consts.RxBusUtils)

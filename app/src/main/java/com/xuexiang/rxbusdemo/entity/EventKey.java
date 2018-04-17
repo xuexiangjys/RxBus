@@ -61,4 +61,10 @@ public class EventKey {
 	 * 清除事件
 	 */
 	public final static String EVENT_CLEAR = "event_clear";
+
+
+	/**
+	 * 测试
+	 */
+	public final static int EVENT_TEST_ID = 1111;
 }

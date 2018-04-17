@@ -21,6 +21,7 @@ import com.xuexiang.rxbus.bus.RxBusUtils;
 import com.xuexiang.rxbus.bus.rxevent.RxEventUtils;
 import com.xuexiang.rxbusdemo.entity.Event;
 import com.xuexiang.rxbusdemo.entity.EventKey;
+import com.xuexiang.rxbusdemo.util.RxEventTest;
 
 import rx.functions.Action1;
 
@@ -30,6 +31,7 @@ import rx.functions.Action1;
  * @date 2018/3/3 下午4:49
  */
 public class RxBusTestFragment1 extends BaseRxBusTestFragment {
+    private RxEventTest mRxEventTest = new RxEventTest();
 
     @Override
     protected void initViews() {
@@ -66,6 +68,7 @@ public class RxBusTestFragment1 extends BaseRxBusTestFragment {
         RxBusUtils.get().unregisterAll(EventKey.EVENT_ONE_BY_ONE);
         RxBusUtils.get().unregister(EventKey.EVENT_CLEAR, mSubscribeInfo);
 
+        mRxEventTest.unRegister();
     }
 
 

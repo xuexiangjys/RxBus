@@ -42,7 +42,9 @@ final class RxBusHelper {
 
         if (rxBusInfo.BusRegisterMethod != null) {//有被BusRegister注解的方法
             rxBusInfo.project.logger.quiet "BusRegisterMethod != null"
-            rxBusInfo.BusRegisterMethod.insertAfter(getRegisterRxBusMethodCode(rxBusInfo))
+            String registerCode = getRegisterRxBusMethodCode(rxBusInfo)
+            rxBusInfo.project.logger.quiet registerCode
+            rxBusInfo.BusRegisterMethod.insertAfter(registerCode)
         } else if (rxBusInfo.OnCreateMethod == null) {//没有OnCreateMethod，创建并加上新代码
             rxBusInfo.project.logger.quiet "OnCreateMethod == null , isActivity: " + rxBusInfo.isActivity
             String pre_create_str = rxBusInfo.isActivity ? Consts.Activity_OnCreate : Consts.Fragment_OnCreate
@@ -52,11 +54,15 @@ final class RxBusHelper {
             rxBusInfo.clazz.addMethod(registerRxBusMethod)
         } else {//有OnCreateMethod，直接插入新代码
             rxBusInfo.project.logger.quiet "OnCreateMethod != null"
-            rxBusInfo.OnCreateMethod.insertAfter(getRegisterRxBusMethodCode(rxBusInfo))
+            String registerCode = getRegisterRxBusMethodCode(rxBusInfo)
+            rxBusInfo.project.logger.quiet registerCode
+            rxBusInfo.BusRegisterMethod.insertAfter(registerCode)
         }
         if (rxBusInfo.BusUnRegisterMethod != null) {//有被BusUnRegister注解的方法
             rxBusInfo.project.logger.quiet "BusUnRegisterMethod != null"
-            rxBusInfo.BusUnRegisterMethod.insertAfter(getUnRegisterRxBusMethodCode(rxBusInfo))
+            String unRegisterCode = getUnRegisterRxBusMethodCode(rxBusInfo)
+            rxBusInfo.project.logger.quiet unRegisterCode
+            rxBusInfo.BusUnRegisterMethod.insertAfter(unRegisterCode)
         } else if (rxBusInfo.OnDestroyMethod == null) {
             rxBusInfo.project.logger.quiet "OnDestroyMethod == null"
             String method = Consts.Pre_OnDestroy + getUnRegisterRxBusMethodCode(rxBusInfo) + "    }"
@@ -65,7 +71,9 @@ final class RxBusHelper {
             rxBusInfo.clazz.addMethod(unregisterRxBusMethod)
         } else {
             rxBusInfo.project.logger.quiet "OnDestroyMethod != null"
-            rxBusInfo.OnDestroyMethod.insertAfter(getUnRegisterRxBusMethodCode(rxBusInfo))
+            String unRegisterCode = getUnRegisterRxBusMethodCode(rxBusInfo)
+            rxBusInfo.project.logger.quiet unRegisterCode
+            rxBusInfo.OnDestroyMethod.insertAfter(unRegisterCode)
         }
 
         rxBusInfo.clazz.writeFile(path)
@@ -79,21 +87,21 @@ final class RxBusHelper {
     static String getRegisterRxBusMethodCode(RxBusInfo rxBusInfo) {
         String registerCode = "\n"
         rxBusInfo.clazz.addInterface(rxBusInfo.clazz.classPool.get(Consts.Action))//为当前的类添加事件处理的接口
-        for (int i = 0; i < rxBusInfo.getMethods().size(); i++) {
-            CtMethod method = rxBusInfo.getMethods().get(i)
-            MethodInfo methodInfo = method.getMethodInfo()
+        for (int i = 0; i < rxBusInfo.methods.size(); i++) {
+            CtMethod method = rxBusInfo.methods.get(i)
+            MethodInfo methodInfo = method.methodInfo
 
-            Annotation mAnnotation = rxBusInfo.getAnnotations().get(i)
+            Annotation mAnnotation = rxBusInfo.annotations.get(i)
             AnnotationsAttribute attribute = methodInfo.getAttribute(AnnotationsAttribute.visibleTag)
             //获取注解属性
             javassist.bytecode.annotation.Annotation annotation = attribute.getAnnotation(mAnnotation.annotationType().canonicalName)
             //获取注解
-            int eventId = ((IntegerMemberValue) annotation.getMemberValue("id")).getValue()
+            int eventId = ((IntegerMemberValue) annotation.getMemberValue("id")).value
             rxBusInfo.eventIds.add(eventId)
             //获取注解的值
             int thread = -1
             if (annotation.getMemberValue("thread") != null) {
-                thread = ((IntegerMemberValue) annotation.getMemberValue("thread")).getValue()
+                thread = ((IntegerMemberValue) annotation.getMemberValue("thread")).value
             }
             String registerMethod = ""
             switch (thread) {
@@ -118,14 +126,14 @@ final class RxBusHelper {
     static initEventDispatch(RxBusInfo rxBusInfo) {
         String SwitchStr = Consts.Pre_Switch_Str
         for (int i = 0; i < rxBusInfo.eventIds.size(); i++) {
-            CtMethod method = rxBusInfo.getMethods().get(i)
-            CtClass[] parameterTypes = method.getParameterTypes()
+            CtMethod method = rxBusInfo.methods.get(i)
+            CtClass[] parameterTypes = method.parameterTypes
             boolean oneParam = parameterTypes.length == 1
             boolean isBaseType = false
             String paramStr = ""
             if (oneParam) {
                 String parameterTypeName = parameterTypes[0].name
-                if (parameterTypeName == Consts.RxEvent) {
+                if (parameterTypeName == Consts.RxEvent) {  //如果参数类型是RxEvent就不需要拆包
                     rxBusInfo.clazz.classPool.importPackage(parameterTypeName)
                     paramStr =  "(" + parameterTypeName + ")rxEvent"
                 } else {
@@ -150,7 +158,6 @@ final class RxBusHelper {
                 }
             }
 
-
             SwitchStr += "            case " + rxBusInfo.eventIds.get(i) + ": \n" +
                     "                " + method.getName() + "(" + (oneParam ? paramStr : "") + ");\n" +
                     "                break;\n"
@@ -172,6 +179,6 @@ final class RxBusHelper {
         rxBusInfo.eventIds.each { eventId -> unregisterCode += "        RxEventUtils.unregisterAll(" + eventId + ");\n" }
 
         rxBusInfo.project.logger.quiet "Add RxBus UnRegister Code:"
-        return unregisterCode;
+        return unregisterCode
     }
 }

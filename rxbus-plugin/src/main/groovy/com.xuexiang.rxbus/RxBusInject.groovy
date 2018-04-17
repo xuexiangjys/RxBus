@@ -67,12 +67,12 @@ class RxBusInject {
                         RxBusInfo rxBusInfo = new RxBusInfo()
                         rxBusInfo.setProject(project)
                         rxBusInfo.setClazz(c)
-                        if (c.getName().endsWith("Activity") || c.getSuperclass().getName().endsWith("Activity")) {
+                        if (c.name.endsWith("Activity") || c.superclass.name.endsWith("Activity")) {
                             rxBusInfo.setIsActivity(true)
                         }
-                        boolean isAnnotatedByBus = false //遍历类的方法，寻找是否有方法被@Bus标注
+
                         //getDeclaredMethods获取自己申明的方法，c.getMethods()会把所有父类的方法都加上
-                        for (CtMethod ctMethod : c.getDeclaredMethods()) {
+                        for (CtMethod ctMethod : c.declaredMethods) {
                             String methodName = Utils.getMethodSimpleName(ctMethod)
                             if (Consts.ON_CREATE.contains(methodName)) {
                                 rxBusInfo.setOnCreateMethod(ctMethod)
@@ -80,26 +80,31 @@ class RxBusInject {
                             if (Consts.ON_DESTROY.contains(methodName)) {
                                 rxBusInfo.setOnDestroyMethod(ctMethod)
                             }
-                            ctMethod.getAnnotations().each { Annotation annotation ->
-                                if (annotation.annotationType().canonicalName == Consts.BusRegisterAnnotation)
+                            ctMethod.annotations.each { Annotation annotation ->
+                                if (annotation.annotationType().canonicalName == Consts.BusRegisterAnnotation) {
+                                    project.logger.error "find @BusRegister method:" + c.getName() + " - " + ctMethod.getName()
                                     rxBusInfo.setBusRegisterMethod(ctMethod)
-                                if (annotation.annotationType().canonicalName == Consts.BusUnRegisterAnnotation)
+                                }
+                                if (annotation.annotationType().canonicalName == Consts.BusUnRegisterAnnotation) {
+                                    project.logger.error "find @BusUnRegister method:" + c.getName() + " - " + ctMethod.getName()
                                     rxBusInfo.setBusUnRegisterMethod(ctMethod)
+                                }
                                 if (annotation.annotationType().canonicalName == Consts.BusAnnotation) {
-                                    project.logger.info " method:" + c.getName() + " -" + ctMethod.getName()
+                                    project.logger.error "find @Bus method:" + c.getName() + " - " + ctMethod.getName()
                                     rxBusInfo.methods.add(ctMethod)
                                     rxBusInfo.annotations.add(annotation)
-                                    if (!isAnnotatedByBus) isAnnotatedByBus = true
+//                                    if (!isAnnotatedByBus) isAnnotatedByBus = true
                                 }
                             }
                         }
-                        if (((rxBusInfo.BusRegisterMethod != null && rxBusInfo.BusUnRegisterMethod == null
-                                || rxBusInfo.BusRegisterMethod == null && rxBusInfo.BusUnRegisterMethod != null))) {
+
+                        if ((rxBusInfo.BusRegisterMethod != null && rxBusInfo.BusUnRegisterMethod == null)
+                                || (rxBusInfo.BusRegisterMethod == null && rxBusInfo.BusUnRegisterMethod != null)) {
                             assert false: Consts.BusErrInfo
                             //发现@BusRegister和@BusUnRegister使用不匹配，直接中断操作
                         }
 
-                        if (rxBusInfo != null && isAnnotatedByBus) {
+                        if (rxBusInfo != null && rxBusInfo.methods != null && rxBusInfo.methods.size() > 0) {
                             try {
                                 RxBusHelper.initRxBus(rxBusInfo, path)
                             } catch (DuplicateMemberException e) {

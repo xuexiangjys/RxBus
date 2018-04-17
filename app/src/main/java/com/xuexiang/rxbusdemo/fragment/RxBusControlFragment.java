@@ -56,6 +56,7 @@ public class RxBusControlFragment extends BaseFragment {
             case R.id.btn_send_data:
 //                RxBusUtils.get().post(EventKey.EVENT_HAVE_DATA, new Event(EventKey.EVENT_HAVE_DATA, "这里携带的是数据"));
 
+                RxEventUtils.post(EventKey.EVENT_TEST_ID);
                 RxEventUtils.post(EventKey.EVENT_HAVE_DATA_ID, new Event(EventKey.EVENT_HAVE_DATA, "这里携带的是数据"));
                 break;
             case R.id.btn_send_nodata:
