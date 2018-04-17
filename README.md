@@ -155,7 +155,9 @@ RxBusUtils.get().unregister(EventKey.EVENT_CLEAR, mSubscribeInfo);
 
 ```
 
-3.使用@Bus注册的事件，如果是在Activity或者Fragment中，框架会自动进行事件注销。当然你也可以主动进行事件注销。
+3.使用@Bus注册的事件，如果是在Activity或者Fragment中，框架会自动进行事件注销。
+
+当然你也可以主动进行事件注销：
 
 ```
 RxEventUtils.unregisterAll(EventKey.EVENT_HAVE_DATA_ID);
