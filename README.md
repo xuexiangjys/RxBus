@@ -24,7 +24,6 @@
 
 ## 1、演示（请star支持）
 
-### 1.1、RxBus
 ![](https://github.com/xuexiangjys/RxUtil/blob/master/img/rxbus.gif)
 
 ## 2、如何使用
@@ -107,20 +106,20 @@ private void handleNoDataEvent() {
 
 ### 2.3、事件发送
 
-1.使用RxBusUtils.get().post(Object eventName)发送不带数据的事件。
+方法一：使用RxBusUtils.get().post(Object eventName)发送不带数据的事件。
 
 ```
 RxBusUtils.get().post(EventKey.EVENT_NO_DATA);
 ```
 
-2.使用RxBusUtils.get().post(Object eventName, Object content)发送携带数据的事件。
+方法二：使用RxBusUtils.get().post(Object eventName, Object content)发送携带数据的事件。
 
 ```
 RxBusUtils.get().post(EventKey.EVENT_HAVE_DATA, new Event(EventKey.EVENT_HAVE_DATA, "这里携带的是数据"));
 RxBusUtils.get().post(EventKey.EVENT_HAVE_DATA, true);
 ```
 
-3.使用@Bus进行事件注册和注销的需使用RxEventUtils进行事件方式。
+方法三：使用@Bus进行事件注册和注销的需使用RxEventUtils进行事件方式。
 
 * 发送不带数据的事件
 
