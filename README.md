@@ -211,7 +211,7 @@ public class RxEventTest {
 
 ## 联系方式
 
-[![](https://img.shields.io/badge/%E7%82%B9%E6%88%91%E4%B8%80%E9%94%AE%E5%8A%A0%E5%85%A5QQ%E7%BE%A4-602082750-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=1e1f4bcfd8775a55e6cf6411f6ff0e7058ff469ef87c4d1e67890c27f0c5a390)
+[![](https://img.shields.io/badge/%E7%82%B9%E6%88%91%E4%B8%80%E9%94%AE%E5%8A%A0%E5%85%A5QQ%E7%BE%A4-602082750-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=2c3af4151f887393c821dddcee43120be5dd1a54c43d0a7eb2b369c089bcc978)
 
 ![](https://github.com/xuexiangjys/XPage/blob/master/img/qq_group.jpg)
 
